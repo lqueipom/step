@@ -4,6 +4,11 @@
   width: 650px;
 }
 
+#content img {
+  height: 100%;
+  width: 100%;
+}
+
 .image-thumbnails {
   display: flex;
   flex-wrap: wrap;
@@ -22,4 +27,6 @@
 
 #random-image-container img {
   margin-top: 20px;
+  max-height: 100%;
+  max-width: 100%;
 }
