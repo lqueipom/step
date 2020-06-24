@@ -17,10 +17,10 @@
  * element with that URL to the page.
  */
 function randomizeImage() {
-  // The images directory contains 13 images, so generate a random index between
-  // 1 and 13.
-  const imageIndex = Math.floor(Math.random() * 13) + 1;
-  const imgUrl = 'images/stanley-' + imageIndex + '.jpg';
+  // The images directory contains 15 images, so generate a random index between
+  // 1 and 15.
+  const imageIndex = Math.floor(Math.random() * 15) + 1;
+  const imgUrl = 'images-me/laura-' + imageIndex + '.jpg';
 
   const imgElement = document.createElement('img');
   imgElement.src = imgUrl;
