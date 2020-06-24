@@ -1,4 +1,5 @@
 #content {
+  font-family: 'Montserrat', sans-serif;
   margin-left: auto;
   margin-right: auto;
   width: 650px;
@@ -7,6 +8,20 @@
 #content img {
   height: 100%;
   width: 100%;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  border-style: solid;
+}
+
+.cell {
+  text-align: center;
+  background: #E0FFFF;
+  color: black;
+  border-style: solid;
 }
 
 .image-thumbnails {
