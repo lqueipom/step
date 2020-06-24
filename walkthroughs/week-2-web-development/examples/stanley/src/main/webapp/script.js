@@ -30,3 +30,7 @@ function randomizeImage() {
   imageContainer.innerHTML = '';
   imageContainer.appendChild(imgElement);
 }
+
+function init() {
+  document.getElementById("content").style.color = 'green';
+}
