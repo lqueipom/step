@@ -32,7 +32,7 @@ function randomizeImage() {
 }
 
 function init() {
-  // document.getElementById("content").style.color = 'green';
+  // Changes color of text
   let div = document.querySelector('#content');
   div.classList.add('color')
 }
