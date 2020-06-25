@@ -12,6 +12,7 @@
 
 .color {
   color: blueviolet;
+}
 
 .container {
   display: grid;
@@ -25,7 +26,6 @@
   background: #E0FFFF;
   color: black;
   border-style: solid;
-
 }
 
 .image-thumbnails {
