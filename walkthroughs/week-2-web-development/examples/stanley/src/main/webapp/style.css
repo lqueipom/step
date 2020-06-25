@@ -10,6 +10,12 @@
   width: 100%;
 }
 
+#random-image-container img {
+  margin-top: 20px;
+  max-height: 100%;
+  max-width: 100%;
+}
+
 .caption {
   color: black;
   text-align: center;
@@ -25,7 +31,7 @@
 .color {
   color: blueviolet;
 }
-  
+
 .coloring {
   font-style: italic;
   text-align: center;  
@@ -54,8 +60,22 @@
   border: thick solid black;
 }
 
-#random-image-container img {
-  margin-top: 20px;
-  max-height: 100%;
-  max-width: 100%;
+.menu {
+  float: none;
+  position: absolute;
+  text-align: center;
+  width: 400px;
+}
+
+.menu a {
+  background-color: #F8F8FF;
+  color: black;
+  display: block;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+}
+
+.menu a:hover {
+  background-color: #E6E6FA;
 }
