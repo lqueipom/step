@@ -10,6 +10,10 @@
   width: 100%;
 }
 
+.color {
+  color: blueviolet;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;

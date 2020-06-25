@@ -30,3 +30,9 @@ function randomizeImage() {
   imageContainer.innerHTML = '';
   imageContainer.appendChild(imgElement);
 }
+
+function init() {
+  // Changes color of text
+  let div = document.querySelector('#content');
+  div.classList.add('color')
+}
