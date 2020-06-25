@@ -10,23 +10,32 @@
   width: 100%;
 }
 
+.caption {
+  color: black;
+  text-align: center;
+}
+
+.cell {
+  background: #E0FFFF;
+  border-style: solid;
+  color: black;
+  text-align: center;
+}
+
+.color {
+  color: blueviolet;
+}
+  
 .coloring {
   font-style: italic;
   text-align: center;  
 }
 
 .container {
+  border-style: solid;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  border-style: solid;
-}
-
-.cell {
-  text-align: center;
-  background: #E0FFFF;
-  color: black;
-  border-style: solid;
 }
 
 .image-thumbnails {
