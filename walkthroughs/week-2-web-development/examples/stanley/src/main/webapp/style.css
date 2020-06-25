@@ -10,6 +10,11 @@
   width: 100%;
 }
 
+.caption {
+  text-align: center;
+  color: black;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
