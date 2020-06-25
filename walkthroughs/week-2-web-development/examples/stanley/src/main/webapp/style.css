@@ -24,6 +24,11 @@
   border-style: solid;
 }
 
+.font {
+  font-style: italic;
+  text-align: center;  
+}
+
 .image-thumbnails {
   display: flex;
   flex-wrap: wrap;
