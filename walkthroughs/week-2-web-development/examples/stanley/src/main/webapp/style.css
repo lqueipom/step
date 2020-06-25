@@ -10,6 +10,11 @@
   width: 100%;
 }
 
+.coloring {
+  font-style: italic;
+  text-align: center;  
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -22,11 +27,6 @@
   background: #E0FFFF;
   color: black;
   border-style: solid;
-}
-
-.font {
-  font-style: italic;
-  text-align: center;  
 }
 
 .image-thumbnails {
