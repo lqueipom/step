@@ -10,9 +10,12 @@
   width: 100%;
 }
 
+.caption {
+  text-align: center;
+  color: black;
+
 .color {
   color: blueviolet;
-}
 
 .container {
   display: grid;
