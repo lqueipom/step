@@ -45,9 +45,10 @@
 }
 
 .image-thumbnails {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
+  text-align: center;
 }
 
 .image-thumbnails img {
