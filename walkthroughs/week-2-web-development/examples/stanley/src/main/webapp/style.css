@@ -17,8 +17,8 @@
 }
 
 .caption {
-  text-align: center;
   color: black;
+  text-align: center;
 }
 
 .color {
@@ -26,10 +26,10 @@
 }
 
 .container {
+  border-style: solid;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  border-style: solid;
 }
 
 .cell {
@@ -40,9 +40,10 @@
 }
 
 .image-thumbnails {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
+  text-align: center;
 }
 
 .image-thumbnails img {
