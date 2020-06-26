@@ -10,11 +10,26 @@
   width: 100%;
 }
 
+#random-image-container img {
+  margin-top: 20px;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.caption {
+  color: black;
+  text-align: center;
+}
+
+.color {
+  color: blueviolet;
+}
+
 .container {
+  border-style: solid;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  border-style: solid;
 }
 
 .cell {
@@ -30,9 +45,10 @@
 }
 
 .image-thumbnails {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
+  text-align: center;
 }
 
 .image-thumbnails img {
@@ -45,8 +61,22 @@
   border: thick solid black;
 }
 
-#random-image-container img {
-  margin-top: 20px;
-  max-height: 100%;
-  max-width: 100%;
+.menu {
+  float: none;
+  position: absolute;
+  text-align: center;
+  width: 400px;
+}
+
+.menu a {
+  background-color: #F8F8FF;
+  color: black;
+  display: block;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+}
+
+.menu a:hover {
+  background-color: #E6E6FA;
 }
