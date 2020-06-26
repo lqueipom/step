@@ -34,5 +34,5 @@ function randomizeImage() {
 function init() {
   // Changes color of text
   let div = document.querySelector('#content');
-  div.classList.add('color')
+  div.classList.add('changing-color')
 }

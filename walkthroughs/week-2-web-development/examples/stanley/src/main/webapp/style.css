@@ -21,8 +21,20 @@
   text-align: center;
 }
 
-.color {
+.cell {
+  background: #E0FFFF;
+  border-style: solid;
+  color: black;
+  text-align: center;
+}
+
+.changing-color {
   color: blueviolet;
+}
+
+.titles {
+  font-style: italic;
+  text-align: center;  
 }
 
 .container {
@@ -30,13 +42,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-}
-
-.cell {
-  text-align: center;
-  background: #E0FFFF;
-  color: black;
-  border-style: solid;
 }
 
 .image-thumbnails {
