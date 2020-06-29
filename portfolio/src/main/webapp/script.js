@@ -26,3 +26,9 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+async function getRandomMyNameUsingAsyncAwait() {
+  const response = await fetch('/data');
+  const name = await response.text();
+  document.getElementById('name-container').innerText = name;
+}
