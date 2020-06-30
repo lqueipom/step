@@ -34,18 +34,15 @@ async function getRandomMyNameUsingAsyncAwait() {
 }
 
 function getJSONString() {
-  fetch('/data').then(response => response.json()).then((json) => {
-    // stats is an object, not a string, so we have to
-    // reference its fields to create HTML content
+  fetch('/data').then(response => response.json()).then((messages) => {
+    // Stats is an object, not a string, so we have to
+    // reference its fields to create HTML content.
 
     const jsonListElement = document.getElementById('json-string');
     jsonListElement.innerHTML = '';
-    jsonListElement.appendChild(
-        createListElement(json[0]));
-    jsonListElement.appendChild(
-        createListElement(json[1]));
-    jsonListElement.appendChild(
-        createListElement(json[2]));
+    for (const elem of messages) {
+      jsonListElement.appendChild(createListElement(elem));
+    } 
   });
 }
 
