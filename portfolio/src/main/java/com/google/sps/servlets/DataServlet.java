@@ -32,9 +32,6 @@ public class DataServlet extends HttpServlet {
     @Override
     public void init() {
       messages = new ArrayList<String>();
-      messages.add("How are you?");
-      messages.add("How is the weather today?");
-      messages.add("What are you doing?");
     }
 
     @Override 
@@ -51,4 +48,43 @@ public class DataServlet extends HttpServlet {
       Gson gson = new Gson();
       return gson.toJson(messages);
     }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      // Get the input from the form.
+      String text = getParameter(request, "word-input", "");
+      boolean cut = Boolean.parseBoolean(getParameter(request, "cut", "false"));
+      boolean add = Boolean.parseBoolean(getParameter(request, "add", "false"));
+      boolean lowerCase = Boolean.parseBoolean(getParameter(request, "lowerCase", "false"));
+      
+
+    // Storing comments in their respective bins.
+    if (cut) {
+      text = text.substring(1);
+    }
+
+    if (add) {
+      text = text + 'a';
+    }
+
+    if (lowerCase) {
+      text = text.toLowerCase();
+    }
+
+    // Respond with the result.
+    response.setContentType("text/html;");
+    response.getWriter().println(text);
+  }
+
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
+  }
 }
