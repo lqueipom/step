@@ -19,17 +19,17 @@
       <button onclick="getJSONString()">Fetch JSON string!</button>
       <ul id="json-string"></ul>
 
-      <h1>Modify your word</h1>
+      <h1>Give your feedback!</h1>
       <form action="/data" method="POST">
         <p>Do you like my portfolio?</p>
         <textarea name="word-input">Input feedback here.</textarea>
         <br/><br/>
         <p>Choose some options:</p>
-        <input type="radio" name="positive" value="true"> Yes, I like it!
+        <input type="radio" name="status" value="positive"> Yes, I like it!
         <br/><br/>
-        <input type="radio" name="negative" value="true"> No, needs work.
+        <input type="radio" name="status" value="negative"> No, needs work.
         <br/><br/>
-        <input type="radio" name="mixed" value="true"> Yes, but...
+        <input type="radio" name="status" value="mixed"> Yes, but...
         <br/><br/>
         <input type="submit" />
       </form>
