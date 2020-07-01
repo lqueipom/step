@@ -59,7 +59,6 @@ public class DataServlet extends HttpServlet {
       boolean cut = Boolean.parseBoolean(getParameter(request, "cut", "false"));
       boolean add = Boolean.parseBoolean(getParameter(request, "add", "false"));
       boolean lowerCase = Boolean.parseBoolean(getParameter(request, "lowerCase", "false"));
-      
 
     // Storing comments in their respective bins.
     if (cut) {
