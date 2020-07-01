@@ -13,6 +13,26 @@
       <p>Click here to get my name:</p>
       <button onclick="getRandomMyNameUsingAsyncAwait()">Hello</button>
       <div id="name-container"></div>
+
+      <h1>Server Stats</h1>
+      <p>Click here to see JSON string:</p>
+      <button onclick="getJSONString()">Fetch JSON string!</button>
+      <ul id="json-string"></ul>
+
+      <h1>Modify your word</h1>
+      <form action="/data" method="POST">
+        <p>Insert Word:</p>
+        <textarea name="word-input">Input word here.</textarea>
+        <br/><br/>
+        <p>Choose some options:</p>
+        <input type="checkbox" name="add" value="true"> Add letter
+        <br/><br/>
+        <input type="checkbox" name="cut" value="true"> Cut word
+        <br/><br/>
+        <input type="checkbox" name="lowerCase" value="true"> Lower Case
+        <br/><br/>
+        <input type="submit" />
+      </form>
     </div>
   </body>
 </html>

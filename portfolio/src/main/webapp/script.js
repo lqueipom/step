@@ -32,3 +32,23 @@ async function getRandomMyNameUsingAsyncAwait() {
   const name = await response.text();
   document.getElementById('name-container').innerText = name;
 }
+
+function getJSONString() {
+  fetch('/data').then(response => response.json()).then((messages) => {
+    // Stats is an object, not a string, so we have to
+    // reference its fields to create HTML content.
+
+    const jsonListElement = document.getElementById('json-string');
+    jsonListElement.innerHTML = '';
+    for (const elem of messages) {
+      jsonListElement.appendChild(createListElement(elem));
+    } 
+  });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}

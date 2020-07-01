@@ -16,17 +16,82 @@ package com.google.sps.servlets;
 
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
+import java.util.List;
+import com.google.gson.Gson;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  private List<String> messages;
+
+    @Override
+    public void init() {
+      messages = new ArrayList<String>();
+    }
+
+    @Override 
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      // Converting Array List to JSON.
+      String jsonVersion = convertToJson(messages);
+
+      // Send JSON string.
+      response.setContentType("application/json;");
+      response.getWriter().println(jsonVersion);
+    }
+
+    private String convertToJson(List messages) {
+      Gson gson = new Gson();
+      return gson.toJson(messages);
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      // Get the input from the form.
+      String text = getParameter(request, "word-input", "");
+      boolean cut = Boolean.parseBoolean(getParameter(request, "cut", "false"));
+      boolean add = Boolean.parseBoolean(getParameter(request, "add", "false"));
+      boolean lowerCase = Boolean.parseBoolean(getParameter(request, "lowerCase", "false"));
+
+    // Storing comments in their respective bins.
+    if (cut) {
+      text = text.substring(1);
+    }
+
+    if (add) {
+      text = text + 'a';
+    }
+
+    if (lowerCase) {
+      text = text.toLowerCase();
+    }
+
+    Entity taskEntity = new Entity("Task");
+    taskEntity.setProperty("comment", text);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(taskEntity);
+
+    // Respond with the result.
     response.setContentType("text/html;");
-    response.getWriter().println("Hello Laura!");
+    response.getWriter().println(text);
+  }
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+ 
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 }
