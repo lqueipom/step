@@ -14,17 +14,21 @@
 
 package com.google.sps.servlets;
 
-import java.io.IOException;
-import javax.servlet.annotation.WebServlet;
-import java.util.List;
-import com.google.gson.Gson;
-import java.util.ArrayList;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.gson.Gson;
+import com.google.sps.data.Task;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
@@ -42,6 +46,17 @@ public class DataServlet extends HttpServlet {
       // Converting Array List to JSON.
       String jsonVersion = convertToJson(messages);
 
+      Query query = new Query("Comments").addSort("comment", SortDirection.ASCENDING);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      PreparedQuery results = datastore.prepare(query);
+
+      for (Entity entity : results.asIterable()) {
+        String comment = (String) entity.getProperty("comment");
+
+        Task task = new Task(comment);
+        jsonVersion.add(task);
+    }
+
       // Send JSON string.
       response.setContentType("application/json;");
       response.getWriter().println(jsonVersion);
@@ -56,33 +71,33 @@ public class DataServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       // Get the input from the form.
       String text = getParameter(request, "word-input", "");
-      boolean cut = Boolean.parseBoolean(getParameter(request, "cut", "false"));
-      boolean add = Boolean.parseBoolean(getParameter(request, "add", "false"));
-      boolean lowerCase = Boolean.parseBoolean(getParameter(request, "lowerCase", "false"));
+      boolean positive = Boolean.parseBoolean(getParameter(request, "positive", "false"));
+      boolean negative = Boolean.parseBoolean(getParameter(request, "negative", "false"));
+      boolean mixed = Boolean.parseBoolean(getParameter(request, "mixed", "false"));
       
+      Entity taskEntity = new Entity("Comments");
+      taskEntity.setProperty("comment", text);
 
-    // Storing comments in their respective bins.
-    if (cut) {
-      text = text.substring(1);
-    }
+      // Storing comments in their respective bins.
+      if (positive) {
+        taskEntity.setProperty("status", "positive");
+      } 
+      
+      if (negative) {
+        taskEntity.setProperty("status", "negative");
+      }
 
-    if (add) {
-      text = text + 'a';
-    }
+      if (mixed) {
+        taskEntity.setProperty("status", "mixed");
+      }
 
-    if (lowerCase) {
-      text = text.toLowerCase();
-    }
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(taskEntity);
 
-    Entity taskEntity = new Entity("Task");
-    taskEntity.setProperty("comment", text);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(taskEntity);
-
-    // Respond with the result.
-    response.setContentType("text/html;");
-    response.getWriter().println(text);
-  }
+      // Respond with the result.
+      response.setContentType("text/html;");
+      response.getWriter().println(text);
+}
   /**
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
