@@ -55,7 +55,7 @@ public class DataServlet extends HttpServlet {
 
         Task task = new Task(comment);
         jsonVersion.add(task);
-    }
+      }
 
       // Send JSON string.
       response.setContentType("application/json;");
@@ -102,11 +102,8 @@ public class DataServlet extends HttpServlet {
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
    */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
+    private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+      String value = request.getParameter(name);
+      return value != null ? value : defaultValue;
   }
 }
