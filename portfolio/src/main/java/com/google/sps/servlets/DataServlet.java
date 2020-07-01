@@ -54,6 +54,12 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
     return gson.toJson(messages);
   }
+   
+  public enum feedback {
+  POSITIVE,
+  NEGATIVE,
+  MIXED
+  };
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -63,20 +69,14 @@ public class DataServlet extends HttpServlet {
     
     Entity taskEntity = new Entity("Comments");
     taskEntity.setProperty("comment", text);
- 
-    enum feedback {
-    POSITIVE: "positive",
-    NEGATIVE: "negative",
-    MIXED: "mixed"
-    };
 
     // Storing comments in their respective bins.
     switch (result) {
-      case 'positive':
+      case feedback.POSITIVE:
         taskEntity.setProperty("status", "positive");
-      case 'negative':
+      case feedback.NEGATIVE:
         taskEntity.setProperty("status", "negative");
-      case 'mixed':
+      case feedback.MIXED:
         taskEntity.setProperty("status", "mixed");
     }
 
