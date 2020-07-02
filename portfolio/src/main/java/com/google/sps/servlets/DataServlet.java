@@ -42,7 +42,7 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
     
     for (Entity entity : results.asIterable()) {
-    jsonVersion.add(entity);
+      jsonVersion.add(entity);
     }
 
     // Send JSON string.
@@ -54,30 +54,23 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
     return gson.toJson(messages);
   }
-   
-  public enum feedback {
-  POSITIVE,
-  NEGATIVE,
-  MIXED
-  };
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
     String text = getParameter(request, "word-input", "");
-    String result = getParameterValues(request, "status");
+    String result = request.getParameterValues("status");
     
     Entity taskEntity = new Entity("Comments");
     taskEntity.setProperty("comment", text);
 
     // Storing comments in their respective bins.
-    switch (result) {
-      case feedback.POSITIVE:
-        taskEntity.setProperty("status", "positive");
-      case feedback.NEGATIVE:
-        taskEntity.setProperty("status", "negative");
-      case feedback.MIXED:
-        taskEntity.setProperty("status", "mixed");
+    if (result.equals("positive")) {
+      taskEntity.setProperty("status", "positive");
+    } else if (result.equals("negative")) {
+      taskEntity.setProperty("status", "negative");
+    } else if (result.equals("mixed")) {
+      taskEntity.setProperty("status", "mixed");
     }
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -93,9 +86,6 @@ public class DataServlet extends HttpServlet {
 */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
+    return value != null ? value : defaultValue;
   }
 }
