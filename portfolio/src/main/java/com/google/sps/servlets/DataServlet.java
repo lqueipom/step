@@ -43,7 +43,7 @@ public class DataServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
     
     for (Entity entity : results.asIterable()) {
-    jsonVersion.add(entity);
+      jsonVersion.add(entity);
     }
 
     // Send JSON string.
@@ -55,12 +55,6 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
     return gson.toJson(messages);
   }
-
-  enum Feedback {
-    POSITIVE,
-    NEGATIVE,
-    MIXED
-  };
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -87,6 +81,7 @@ public class DataServlet extends HttpServlet {
     response.setContentType("text/html;");
     response.getWriter().println(text);
 }
+
 /**
 * @return the request parameter, or the default value if the parameter
 *         was not specified by the client
