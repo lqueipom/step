@@ -40,7 +40,7 @@ public class DataServlet extends HttpServlet {
 
   @Override 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    int quantity =  Integer.parseInt(request.getParameter("amount"));
+    int quantity = Integer.parseInt(request.getParameter("amount"));
     Query query = new Query("Comments").addSort("comment", SortDirection.ASCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(quantity));
