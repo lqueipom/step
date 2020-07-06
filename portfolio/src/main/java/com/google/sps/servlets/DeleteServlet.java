@@ -27,12 +27,10 @@ public class DeleteServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      Key oneKey = entity.getKey();
-      datastore.delete(oneKey);
+      datastore.delete(entity.getKey());
     }
-    String worked = new String("worked!");
     response.setContentType("text/html;");
-    response.getWriter().println(worked);
+    response.getWriter().println();
   }
 
 }
