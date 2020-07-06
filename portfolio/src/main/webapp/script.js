@@ -49,7 +49,7 @@ function getJSONString() {
 function loadingMyComments() {
     // Stats is an object, not a string, so we have to
     // reference its fields to create HTML content.
-    let elem = parseInt(document.getElementById("amount").value, 10);
+    let elem = parseInt(document.getElementById('amount').value, 10);
     if (elem != 0) {
       fetch(`/data?amount=${elem}`).then(response => response.json()).then((jsonVersion) => {
         const oneComment = document.getElementById('log');
@@ -58,6 +58,13 @@ function loadingMyComments() {
         }
       });
     }
+}
+
+function deleteMyComments() {
+  fetch('/delete-data', {method: 'POST'}).then(response => response.text()).then((worked) => {
+    loadingMyComments();
+    console.log(worked);
+  });
 }
 
 /** Creates an <li> element containing text. */
