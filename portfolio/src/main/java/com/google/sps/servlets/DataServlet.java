@@ -36,20 +36,21 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   
-  private final List<Object> jsonVersion = new ArrayList<>();
+  private final List<Object> json = new ArrayList<>();
 
   @Override 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    int amount =  Integer.parseInt(request.getParameter("amount"));
+    int quantity =  Integer.parseInt(request.getParameter("amount"));
     Query query = new Query("Comments").addSort("comment", SortDirection.ASCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(amount));
+    List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(quantity));
     
     for (Entity entity : results) {
-      jsonVersion.add(entity);
+      json.add(entity.getProperty("comment"));
     }
 
     // Send JSON string.
+    String jsonVersion = new Gson().toJson(json);
     response.setContentType("application/json;");
     response.getWriter().println(jsonVersion);
   }
@@ -62,7 +63,7 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String text = getParameter(request, "word-input", "");
+    String text = request.getParameter("word-input");
     String result = request.getParameter("status");
 
     Entity taskEntity = new Entity("Comments");
