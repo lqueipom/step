@@ -53,7 +53,7 @@ function loadingMyComments() {
     if (elem != 0) {
       fetch(`/data?amount=${elem}`).then(response => response.json()).then((jsonVersion) => {
         const oneComment = document.getElementById('log');
-        for (let i=0; i<elem; i++) {
+        for (let i = 0; i < elem; i++) {
           oneComment.appendChild(createListElement(jsonVersion[i]));
         }
       });
