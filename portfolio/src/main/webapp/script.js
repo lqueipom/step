@@ -60,6 +60,12 @@ function loadingMyComments() {
     }
 }
 
+function deleteMyComments() {
+  fetch('/delete-data', {method: 'POST'}).then(response => response.text()).then((worked) => {
+    loadingMyComments();
+  });
+}
+
 /** Creates an <li> element containing text. */
 function createListElement(text) {
   const liElement = document.createElement('li');
