@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,15 +35,17 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+  
+  private final List<Object> jsonVersion = new ArrayList<>();
 
   @Override 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    List<Object> jsonVersion = new ArrayList<>();
+    int amount =  Integer.parseInt(request.getParameter("amount"));
     Query query = new Query("Comments").addSort("comment", SortDirection.ASCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
+    List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(amount));
     
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : results) {
       jsonVersion.add(entity);
     }
 
@@ -61,7 +64,7 @@ public class DataServlet extends HttpServlet {
     // Get the input from the form.
     String text = getParameter(request, "word-input", "");
     String result = request.getParameter("status");
-    
+
     Entity taskEntity = new Entity("Comments");
     taskEntity.setProperty("comment", text);
 
@@ -76,10 +79,7 @@ public class DataServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(taskEntity);
-
-    // Respond with the result.
-    response.setContentType("text/html;");
-    response.getWriter().println(text);
+    response.sendRedirect("/index.html");
 }
 
 /**
@@ -88,9 +88,6 @@ public class DataServlet extends HttpServlet {
 */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
+    return value != null ? value : defaultValue;
   }
 }

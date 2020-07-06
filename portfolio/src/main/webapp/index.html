@@ -19,7 +19,7 @@
       <button onclick="getJSONString()">Fetch JSON string!</button>
       <ul id="json-string"></ul>
 
-      <h1>Give your feedback!<h1>
+      <h1>Give your feedback!</h1>
       <form action="/data" method="POST">
         <p>Do you like my portfolio?</p>
         <textarea name="word-input">Input feedback here.</textarea>
@@ -33,6 +33,17 @@
         <br/><br/>
         <input type="submit" />
       </form>
+
+      <label for="amount">Choose how many comments you want to display:</label>
+        <select name="amount" id="amount">
+          <option value="0">Zero comment</option>
+          <option value="1">One comment</option>
+          <option value="2">Two comments</option>
+          <option value="3">Three comments</option>
+          <option value="4">Four comments</option>
+        </select>
+      <button onclick="loadingMyComments()">Your comments</button>
+      <ul id="log"></ul>
     </div>
   </body>
 </html>

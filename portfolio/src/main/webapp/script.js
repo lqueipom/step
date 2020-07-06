@@ -47,14 +47,18 @@ function getJSONString() {
 }
 
 function loadingMyComments() {
-  fetch('/data').then(response => response.json()).then((jsonVersion) => {
     // Stats is an object, not a string, so we have to
     // reference its fields to create HTML content.
-    const oneComment = document.getElementById('word-input');
-    for (let comment of jsonVersion) {
-      oneComment.appendChild(createListElement(comment));
-    } 
-  });
+    document.getElementById('log').innerHTML = "";
+    let elem = Integer.parseInt(document.getElementById("amount").value);
+    if (elem != 0) {
+      fetch('/data').then(response => response.json()).then((jsonVersion) => {
+        const oneComment = document.getElementById('log');
+        for (let i=0; i<elem; i++) {
+          oneComment.appendChild(createListElement(jsonVersion[i]));
+        }
+      });
+    }
 }
 
 /** Creates an <li> element containing text. */
