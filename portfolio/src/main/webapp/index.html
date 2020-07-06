@@ -33,6 +33,16 @@
         <br/><br/>
         <input type="submit" />
       </form>
+
+      <label for="amount">Choose how many comments you want to display:</label>
+        <select name="amounts" id="amount" onchange="loadingMyComments()">
+          <option value="0">Zero comments</option>
+          <option value="1">One comment</option>
+          <option value="2">Two comments</option>
+          <option value="3">Three comments</option>
+          <option value="4">Four comments</option>
+        </select>
+      <ul id="log"></ul>
     </div>
   </body>
 </html>
