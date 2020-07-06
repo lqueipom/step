@@ -63,7 +63,6 @@ function loadingMyComments() {
 function deleteMyComments() {
   fetch('/delete-data', {method: 'POST'}).then(response => response.text()).then((worked) => {
     loadingMyComments();
-    console.log(worked);
   });
 }
 
