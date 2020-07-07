@@ -74,6 +74,7 @@ function createListElement(text) {
 }
 
 function visualizeMap() {
+  // Establishes the styles I want added to my map. 
   var stylesMap = new google.maps.StyledMapType(
     [ {
         elementType: 'labels.text.fill',
@@ -126,13 +127,41 @@ function visualizeMap() {
 
     {name: 'Styles Map'});
 
+  var myHome = {
+                 lat: 10.677693, 
+                 lng: -71.625913
+  };  
+  var marLake = {
+                  lat: 9.815833, 
+                 lng: -71.556667
+  };
+
+  // Initializes map.
   const map = new google.maps.Map(
     document.getElementById('map'),
-    {center: {lat: 9.815833, lng: -71.556664}, 
-    zoom: 7,
-    mapTypeControlOptions: {
-      mapTypeIds: ['hybrid', 'styles_map']
-    }
+    {
+      center: {
+        lat: 9.815833, 
+        lng: -71.556664
+      }, 
+      zoom: 7,
+      mapTypeControlOptions: {
+        mapTypeIds: ['hybrid', 'styles_map']
+      }
+  });
+  
+  //Marker positioned at my house. 
+  var marker = new google.maps.Marker({
+    position: myHome,
+    map: map,
+    title: 'My house!'
+  });
+
+  // Marker positioned at Maracaibo Lake.
+  var marker = new google.maps.Marker({
+    position: marLake,
+    map: map,
+    title: 'Maracaibo Lake'
   });
 
   map.mapTypes.set('styles_map', stylesMap);
