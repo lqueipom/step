@@ -128,12 +128,16 @@ function visualizeMap() {
 
   const map = new google.maps.Map(
     document.getElementById('map'),
-    {center: {lat: 9.815833, lng: -71.556664}, 
-    zoom: 7,
-    mapTypeControlOptions: {
-      mapTypeIds: ['hybrid', 'styles_map']
-    }
-  });
+    {
+      center: {
+        lat: 9.815833, 
+        lng: -71.556664
+      }, 
+      zoom: 7,
+      mapTypeControlOptions: {
+        mapTypeIds: ['hybrid', 'styles_map']
+      }
+    });
 
   map.mapTypes.set('styles_map', stylesMap);
   map.setMapTypeId('styles_map');
