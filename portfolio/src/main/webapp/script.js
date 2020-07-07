@@ -151,19 +151,31 @@ function visualizeMap() {
   });
   
   //Marker positioned at my house. 
-  var marker = new google.maps.Marker({
+  var markerHome = new google.maps.Marker({
     position: myHome,
     map: map,
     title: 'My house!'
   });
 
   // Marker positioned at Maracaibo Lake.
-  var marker = new google.maps.Marker({
+  var markerLake = new google.maps.Marker({
     position: marLake,
     map: map,
     title: 'Maracaibo Lake'
   });
 
+  // Info windows for markers.
+  const homeInfoWindow = new google.maps.InfoWindow({
+    content: 'Lived here until I was 18 years old in the 12th floor.' 
+  });
+  
+  const lakeInfoWindow = new google.maps.InfoWindow({
+    content: 'The weather phenomenon known as the Catatumbo lightning at ' +
+      'Lake Maracaibo regularly produces more lightning than any other place on the planet.'
+  });
+  
   map.mapTypes.set('styles_map', stylesMap);
   map.setMapTypeId('styles_map');
+  homeInfoWindow.open(map, markerHome);
+  lakeInfoWindow.open(map, markerLake);
 }
