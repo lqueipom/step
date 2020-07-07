@@ -11,8 +11,39 @@
       <h1>My Portfolio</h1>
       <p>This is my portfolio.</p>
       <p>Click here to get my name:</p>
-      <button onclick="getMyNameUsingAsyncAwait()">Hello</button>
+      <button onclick="getRandomMyNameUsingAsyncAwait()">Hello</button>
       <div id="name-container"></div>
+
+      <h1>Server Stats</h1>
+      <p>Click here to see JSON string:</p>
+      <button onclick="getJSONString()">Fetch JSON string!</button>
+      <ul id="json-string"></ul>
+
+      <h1>Give your feedback!</h1>
+      <form action="/data" method="POST">
+        <p>Do you like my portfolio?</p>
+        <textarea name="word-input">Input feedback here.</textarea>
+        <br/><br/>
+        <p>Choose some options:</p>
+        <input type="radio" name="status" value="positive"> Yes, I like it!
+        <br/><br/>
+        <input type="radio" name="status" value="negative"> No, needs work.
+        <br/><br/>
+        <input type="radio" name="status" value="mixed"> Yes, but...
+        <br/><br/>
+        <input type="submit" />
+      </form>
+
+      <label for="amount">Choose how many comments you want to display:</label>
+        <select name="amounts" id="amount" onchange="loadingMyComments()">
+          <option value="0">Zero comments</option>
+          <option value="1">One comment</option>
+          <option value="2">Two comments</option>
+          <option value="3">Three comments</option>
+          <option value="4">Four comments</option>
+        </select>
+      <ul id="log"></ul>
+      <button onclick="deleteMyComments()">Delete comments!</button>
     </div>
   </body>
 </html>

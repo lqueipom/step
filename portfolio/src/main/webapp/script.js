@@ -27,11 +27,48 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-async function getMyNameUsingAsyncAwait() {
+async function getRandomMyNameUsingAsyncAwait() {
   const response = await fetch('/data');
   const name = await response.text();
   document.getElementById('name-container').innerText = name;
 }
 
+function getJSONString() {
+  fetch('/data').then(response => response.json()).then((messages) => {
+    // Stats is an object, not a string, so we have to
+    // reference its fields to create HTML content.
 
+    const jsonListElement = document.getElementById('json-string');
+    jsonListElement.innerHTML = '';
+    for (const elem of messages) {
+      jsonListElement.appendChild(createListElement(elem));
+    } 
+  });
+}
 
+function loadingMyComments() {
+    // Stats is an object, not a string, so we have to
+    // reference its fields to create HTML content.
+    let elem = parseInt(document.getElementById('amount').value, 10);
+    if (elem != 0) {
+      fetch(`/data?amount=${elem}`).then(response => response.json()).then((jsonVersion) => {
+        const oneComment = document.getElementById('log');
+        for (let i = 0; i < elem; i++) {
+          oneComment.appendChild(createListElement(jsonVersion[i]));
+        }
+      });
+    }
+}
+
+function deleteMyComments() {
+  fetch('/delete-data', {method: 'POST'}).then(response => response.text()).then((worked) => {
+    loadingMyComments();
+  });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
