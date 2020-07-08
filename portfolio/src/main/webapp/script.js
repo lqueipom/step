@@ -74,7 +74,8 @@ function createListElement(text) {
 }
 
 function visualizeMap() {
-  var stylesMap = new google.maps.StyledMapType(
+  // Establishes the styles I want added to my map. 
+  const stylesMap = new google.maps.StyledMapType(
     [ {
         elementType: 'labels.text.fill',
         stylers: [
@@ -126,6 +127,16 @@ function visualizeMap() {
 
     {name: 'Styles Map'});
 
+  const myHome = {
+                 lat: 10.677693, 
+                 lng: -71.625913
+  };  
+  const marLake = {
+                  lat: 9.815833, 
+                 lng: -71.556667
+  };
+
+  // Initializes map.
   const map = new google.maps.Map(
     document.getElementById('map'),
     {
@@ -137,8 +148,34 @@ function visualizeMap() {
       mapTypeControlOptions: {
         mapTypeIds: ['hybrid', 'styles_map']
       }
-    });
+  });
+  
+  //Marker positioned at my house. 
+  const markerHome = new google.maps.Marker({
+    position: myHome,
+    map,
+    title: 'My house!'
+  });
 
+  // Marker positioned at Maracaibo Lake.
+  const markerLake = new google.maps.Marker({
+    position: marLake,
+    map,
+    title: 'Maracaibo Lake'
+  });
+
+  // Info windows for markers.
+  const homeInfoWindow = new google.maps.InfoWindow({
+    content: 'Lived here until I was 18 years old in the 12th floor.' 
+  });
+  
+  const lakeInfoWindow = new google.maps.InfoWindow({
+    content: 'The weather phenomenon known as the Catatumbo lightning at ' +
+      'Lake Maracaibo regularly produces more lightning than any other place on the planet.'
+  });
+  
   map.mapTypes.set('styles_map', stylesMap);
   map.setMapTypeId('styles_map');
+  homeInfoWindow.open(map, markerHome);
+  lakeInfoWindow.open(map, markerLake);
 }
