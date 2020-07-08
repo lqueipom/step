@@ -20,7 +20,7 @@ public class Interactive extends HttpServlet {
   @Override
   public void init() {
       
-    List<Object> locations = new ArrayList<>();
+    locations = new ArrayList<>();
 
     Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/favorites.csv"));
     while (scanner.hasNextLine()) {

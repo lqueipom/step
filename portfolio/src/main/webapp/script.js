@@ -179,11 +179,11 @@ function visualizeMap() {
   homeInfoWindow.open(map, markerHome);
   lakeInfoWindow.open(map, markerLake);
 
-  // favoritePlaces();
+  favoritePlaces();
 }
 
 function favoritePlaces() {
-  fetch('/interactive').then(response => response.json()).then((json) => {
+  fetch('/interactive').then(response => response.json()).then((locations) => {
     const favoriteMap = new google.maps.Map(
       document.getElementById('mapTwo'),
       {
@@ -193,9 +193,9 @@ function favoritePlaces() {
         }, 
         zoom: 7,
     });
-    json.forEach((location) => {
+    locations.forEach((location) => {
       new google.maps.Marker(
-        {position: {lat: location.lat, lng: location.lng}, favoriteMap});
+        {position: {lat: location.lat, lng: location.lng}, map:favoriteMap});
     });
   });
 }
