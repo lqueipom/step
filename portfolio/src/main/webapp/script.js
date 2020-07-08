@@ -72,3 +72,73 @@ function createListElement(text) {
   liElement.innerText = text;
   return liElement;
 }
+
+function visualizeMap() {
+  var stylesMap = new google.maps.StyledMapType(
+    [ {
+        elementType: 'labels.text.fill',
+        stylers: [
+          {color: '#FA8072'}   
+        ]
+      },
+      {
+        elementType: 'labels.text.stroke',
+        stylers: [
+          {color: '#F8F8FF'}
+        ]    
+      },
+      {
+        featureType: 'road',
+        elementType: 'geometry.fill',
+        stylers: [
+          {color: '#FFFAF0'}
+        ]  
+      },
+      {
+        featureType: 'road',
+        elementType: 'geometry.stroke',
+        stylers: [
+          {color: '#A9A9A9'}
+        ]  
+      },
+      {
+        featureType: 'water',
+        elementType: 'geometry.fill',
+        stylers: [
+          {color: '#48D1CC'}
+        ]
+      },
+      {
+        featureType: 'water',
+        elementType: 'geometry.stroke',
+        stylers: [
+          {color: '#000000'}
+        ]
+      },
+      {
+        featureType: 'poi',
+        elementType: 'geometry.fill',
+        stylers: [
+          {color: '#FFD700'}
+        ]
+      }
+    ],
+
+    {name: 'Styles Map'});
+
+  const map = new google.maps.Map(
+    document.getElementById('map'),
+    {
+      center: {
+        lat: 9.815833, 
+        lng: -71.556664
+      }, 
+      zoom: 7,
+      mapTypeControlOptions: {
+        mapTypeIds: ['hybrid', 'styles_map']
+      }
+    });
+
+  map.mapTypes.set('styles_map', stylesMap);
+  map.setMapTypeId('styles_map');
+}
