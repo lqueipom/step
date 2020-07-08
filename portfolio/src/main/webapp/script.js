@@ -153,14 +153,14 @@ function visualizeMap() {
   //Marker positioned at my house. 
   var markerHome = new google.maps.Marker({
     position: myHome,
-    map: map,
+    map,
     title: 'My house!'
   });
 
   // Marker positioned at Maracaibo Lake.
   var markerLake = new google.maps.Marker({
     position: marLake,
-    map: map,
+    map,
     title: 'Maracaibo Lake'
   });
 
