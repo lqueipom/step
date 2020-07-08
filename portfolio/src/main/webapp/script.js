@@ -127,11 +127,11 @@ function visualizeMap() {
 
     {name: 'Styles Map'});
 
-  var myHome = {
+  const myHome = {
                  lat: 10.677693, 
                  lng: -71.625913
   };  
-  var marLake = {
+  const marLake = {
                   lat: 9.815833, 
                  lng: -71.556667
   };
