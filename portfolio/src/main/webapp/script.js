@@ -75,7 +75,7 @@ function createListElement(text) {
 
 function visualizeMap() {
   // Establishes the styles I want added to my map. 
-  var stylesMap = new google.maps.StyledMapType(
+  const stylesMap = new google.maps.StyledMapType(
     [ {
         elementType: 'labels.text.fill',
         stylers: [
@@ -127,11 +127,11 @@ function visualizeMap() {
 
     {name: 'Styles Map'});
 
-  var myHome = {
+  const myHome = {
                  lat: 10.677693, 
                  lng: -71.625913
   };  
-  var marLake = {
+  const marLake = {
                   lat: 9.815833, 
                  lng: -71.556667
   };
@@ -151,16 +151,16 @@ function visualizeMap() {
   });
   
   //Marker positioned at my house. 
-  var markerHome = new google.maps.Marker({
+  const markerHome = new google.maps.Marker({
     position: myHome,
-    map: map,
+    map,
     title: 'My house!'
   });
 
   // Marker positioned at Maracaibo Lake.
-  var markerLake = new google.maps.Marker({
+  const markerLake = new google.maps.Marker({
     position: marLake,
-    map: map,
+    map,
     title: 'Maracaibo Lake'
   });
 
