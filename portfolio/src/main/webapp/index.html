@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>My Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAq6WvtMHmz0-FSGBT4K_oQKZf3pZ4M1kE"></script>
     <script src="script.js"></script>
   </head>
@@ -57,7 +58,7 @@
         <input type="submit" >
       </form>
       <br>
-      
+
       <label for="amount">Choose how many comments you want to display:</label>
         <select name="amounts" id="amount" onchange="loadingMyComments()">
           <option value="0">Zero comments</option>
@@ -68,5 +69,8 @@
         </select>
       <ul id="log"></ul>
       <button onclick="deleteMyComments()">Delete comments!</button>
+      <br>
+
+      <div id="chart"></div>
     </div>
 </html>
