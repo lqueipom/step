@@ -1,8 +1,9 @@
 #amount {
   display: block;
-  margin-top: 25px;
   margin-bottom: 25px;
+  margin-top: 25px;
 }
+
 #content {
   background-color: #E6E6FA;
   font-family: "Comic Sans MS", cursive, sans-serif;
@@ -42,8 +43,8 @@ button, input[type=submit] {
 }
 
 h1, title {
-  font-family: "Comic Sans MS", cursive, sans-serif;
   text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
 textarea {
