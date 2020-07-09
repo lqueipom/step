@@ -1,4 +1,11 @@
+#amount {
+  display: block;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
 #content {
+  background-color: #E6E6FA;
+  font-family: "Comic Sans MS", cursive, sans-serif;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -10,15 +17,39 @@
 }
 
 #map, #mapTwo {
-  height: 300px;
+  flex: 50%;
+  height: 500px;
   margin-left: auto;
   margin-right: auto;
+  padding: 5px;
   text-align: center;
   width: 300px;
 }
 
-h1 {
+.maps {
+  display: flex;
+}
+
+button, input[type=submit] {
+  background-color: #9370DB;
+  border: none;
+  color: white;
+  font-size: 16px;
+  margin: 4px 2px;
+  padding: 15px 32px;
   text-align: center;
+  text-decoration: none;
+}
+
+h1, title {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  text-align: center;
+}
+
+textarea {
+  font-size: 16px;
+  height: 85px; 
+  width: 300px;
 }
 
 

@@ -9,9 +9,11 @@
   </head>
   <body onload="visualizeMap()">
     <h1>My hometown</h1>
-    <div id="map"></div>
-    <div id="mapTwo"></div>
-    
+    <div class="maps">
+      <div id="map"></div>
+      <div id="mapTwo"></div>
+    </div>
+
     <div id="content">
       <h1>My Portfolio</h1>
       <p>This is my portfolio.</p>
@@ -53,9 +55,9 @@
         <input type="radio" id="ru" name="languages" value="ru">
         <label for="ru">Russian.</label>
         <input type="submit" >
-
       </form>
-
+      <br>
+      
       <label for="amount">Choose how many comments you want to display:</label>
         <select name="amounts" id="amount" onchange="loadingMyComments()">
           <option value="0">Zero comments</option>
