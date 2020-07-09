@@ -9,12 +9,12 @@
   margin-top: 20px;
 }
 
-#map, #mapTwo{
+#map, #mapTwo {
   height: 300px;
-  text-align: center;
-  width: 300px;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
+  width: 300px;
 }
 
 h1 {
