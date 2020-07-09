@@ -22,6 +22,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.gson.Gson;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,23 +67,32 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
     String text = request.getParameter("word-input");
-    String result = request.getParameter("status");
+    String status = request.getParameter("status");
+    String language = request.getParameter("languages");
 
+    Translate translate = TranslateOptions.getDefaultInstance().getService();
+    Translation translation = translate.translate(text, Translate.TranslateOption.targetLanguage(language));
+    String finalText = translation.getTranslatedText();
+    System.out.println(language);
+    
     Entity taskEntity = new Entity("Comments");
-    taskEntity.setProperty("comment", text);
+    taskEntity.setProperty("comment", finalText);
 
     // Storing comments in their respective bins.
-    if (result.equals("positive")) {
+    if (status.equals("positive")) {
       taskEntity.setProperty("status", "positive");
-    } else if (result.equals("negative")) {
+    } else if (status.equals("negative")) {
       taskEntity.setProperty("status", "negative");
-    } else if (result.equals("mixed")) {
+    } else if (status.equals("mixed")) {
       taskEntity.setProperty("status", "mixed");
     }
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(taskEntity);
-    response.sendRedirect("/index.html");
+    
+    response.setContentType("text/html; charset=UTF-8");
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().println(finalText);
 }
 
 /**
