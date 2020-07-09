@@ -178,4 +178,24 @@ function visualizeMap() {
   map.setMapTypeId('styles_map');
   homeInfoWindow.open(map, markerHome);
   lakeInfoWindow.open(map, markerLake);
+
+  loadFavoritePlaces();
+}
+
+function loadFavoritePlaces() {
+  fetch('/interactive').then(response => response.json()).then((locations) => {
+    const favoriteMap = new google.maps.Map(
+      document.getElementById('mapTwo'),
+      {
+        center: {
+          lat: 9.815833, 
+          lng: -71.556664
+        }, 
+        zoom: 7,
+    });
+    locations.forEach((location) => {
+      new google.maps.Marker(
+        {position: {lat: location.lat, lng: location.lng}, map:favoriteMap});
+    });
+  });
 }
