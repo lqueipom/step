@@ -179,10 +179,10 @@ function visualizeMap() {
   homeInfoWindow.open(map, markerHome);
   lakeInfoWindow.open(map, markerLake);
 
-  favoritePlaces();
+  loadFavoritePlaces();
 }
 
-function favoritePlaces() {
+function loadFavoritePlaces() {
   fetch('/interactive').then(response => response.json()).then((locations) => {
     const favoriteMap = new google.maps.Map(
       document.getElementById('mapTwo'),
