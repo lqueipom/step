@@ -8,12 +8,14 @@
     <script src="script.js"></script>
   </head>
   <body onload="visualizeMap()">
-    <h1>This is a map</h1>
+    <h1>My hometown</h1>
     <div id="map"></div>
-
+    <div id="mapTwo"></div>
+    
     <div id="content">
       <h1>My Portfolio</h1>
       <p>This is my portfolio.</p>
+
       <p>Click here to get my name:</p>
       <button onclick="getRandomMyNameUsingAsyncAwait()">Hello</button>
       <div id="name-container"></div>
@@ -28,14 +30,30 @@
         <p>Do you like my portfolio?</p>
         <textarea name="word-input">Input feedback here.</textarea>
         <br/><br/>
+
         <p>Choose some options:</p>
-        <input type="radio" name="status" value="positive"> Yes, I like it!
+        <input type="radio" id="yes" name="status" value="positive">
+        <label for="yes">Yes, I like it!</label>
+        <input type="radio" id="no" name="status" value="negative">
+        <label for="no">No, needs work.</label>
+        <input type="radio" id="mixed" name="status" value="mixed">
+        <label for="mixed">Yes, but...</label>
         <br/><br/>
-        <input type="radio" name="status" value="negative"> No, needs work.
-        <br/><br/>
-        <input type="radio" name="status" value="mixed"> Yes, but...
-        <br/><br/>
-        <input type="submit" />
+        <p>Translate your feedback</p>
+        <input type="radio" id="en" name="languages" value="en">
+        <label for="en">English.</label>
+        <input type="radio" id="fr" name="languages" value="fr">
+        <label for="fr">French</label>
+        <input type="radio" id="es" name="languages" value="es">
+        <label for="es">Spanish</label>
+        <input type="radio" id="pr" name="languages" value="pr">
+        <label for="pr">Portuguese.</label>
+        <input type="radio" id="it" name="languages" value="it">
+        <label for="it">Italian</label>
+        <input type="radio" id="ru" name="languages" value="ru">
+        <label for="ru">Russian.</label>
+        <input type="submit" >
+
       </form>
 
       <label for="amount">Choose how many comments you want to display:</label>
@@ -49,5 +67,4 @@
       <ul id="log"></ul>
       <button onclick="deleteMyComments()">Delete comments!</button>
     </div>
-  </body>
 </html>
