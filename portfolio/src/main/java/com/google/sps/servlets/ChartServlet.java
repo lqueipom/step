@@ -12,12 +12,10 @@ import com.google.sps.data.Cases;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @WebServlet("/chart")
 public class ChartServlet extends HttpServlet {
 
   private Collection<Cases> covidCases;
-  
   
   @Override
   public void init() {
