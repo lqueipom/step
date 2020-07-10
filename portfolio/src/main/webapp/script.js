@@ -214,8 +214,9 @@ function makeChart() {
     
     const parameters = {
       chart: {
-      'width':900,
-      'height':500},
+      'width': 900,
+      'height': 500
+      },
       bars: 'horizontal'
     };
 
