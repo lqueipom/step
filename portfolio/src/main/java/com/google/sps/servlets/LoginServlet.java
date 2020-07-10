@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
       response.getWriter().println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
 
     } else {
-      String urlToRedirectToAfterLogIn = "/data";
+      String urlToRedirectToAfterLogIn = "/index.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterLogIn);
       
       response.setContentType("text/html");
