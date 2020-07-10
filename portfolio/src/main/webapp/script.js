@@ -15,7 +15,7 @@
 /**
  * Adds a random greeting to the page.
  */
-google.charts.load('current', {'packages':['corechart']});
+google.charts.load('current', {'packages':['bar']});
 google.charts.setOnLoadCallback(makeChart);
 
 function addRandomGreeting() {
@@ -204,23 +204,22 @@ function loadFavoritePlaces() {
 }
 
 function makeChart() {
-  const dataset = new google.visualization.DataTable();
-  dataset.addColumn('string', 'Books');
-  dataset.addColumn('number', 'Re-reads');
-  dataset.addRows([
-    ['The Book Thief', 3],
-    ['Harry Potter', 7],
-    ['The Mark of Athena', 8]
-  ]);
+  fetch('/chart').then(response => response.json()).then((covidCases) => {
+    var listData = []
+    listData.push(['State', 'Number of Cases', 'Number of Deaths']);
+    covidCases.forEach((entry) => {
+      listData.push([entry.state, entry.cases, entry.deaths]);
+    });
+    const dataset = new google.visualization.arrayToDataTable(listData);
+    
+    const parameters = {
+      chart: {
+      'width':900,
+      'height':500},
+      bars: 'horizontal'
+    };
 
-  const parameters = {
-    'title': 'Favorite Books',
-    'width': 500,
-    'heigth': 400,
-    'backgroundColor': '#E6E6FA',
-    'pieHole': 0.3,
-  };
-
-  const pieChart = new google.visualization.PieChart(document.getElementById('chart'));
-  pieChart.draw(dataset, parameters);
+    const barChart = new google.charts.Bar(document.getElementById('chart'));
+    barChart.draw(dataset, parameters);
+  });
 }
