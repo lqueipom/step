@@ -32,6 +32,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 /** An item on a todo list. */
 
@@ -70,6 +72,9 @@ public class DataServlet extends HttpServlet {
     String status = request.getParameter("status");
     String language = request.getParameter("languages");
 
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
+
     Translate translate = TranslateOptions.getDefaultInstance().getService();
     Translation translation = translate.translate(text, Translate.TranslateOption.targetLanguage(language));
     String finalText = translation.getTranslatedText();
@@ -77,6 +82,7 @@ public class DataServlet extends HttpServlet {
     
     Entity taskEntity = new Entity("Comments");
     taskEntity.setProperty("comment", finalText);
+    taskEntity.setProperty("email", email);
 
     // Storing comments in their respective bins.
     if (status.equals("positive")) {
