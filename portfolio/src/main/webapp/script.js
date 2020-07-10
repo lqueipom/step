@@ -15,6 +15,9 @@
 /**
  * Adds a random greeting to the page.
  */
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(makeChart);
+
 function addRandomGreeting() {
   const greetings =
       ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
@@ -191,11 +194,33 @@ function loadFavoritePlaces() {
           lat: 9.815833, 
           lng: -71.556664
         }, 
-        zoom: 7,
+        zoom: 9
     });
     locations.forEach((location) => {
       new google.maps.Marker(
         {position: {lat: location.lat, lng: location.lng}, map:favoriteMap});
     });
   });
+}
+
+function makeChart() {
+  const dataset = new google.visualization.DataTable();
+  dataset.addColumn('string', 'Books');
+  dataset.addColumn('number', 'Re-reads');
+  dataset.addRows([
+    ['The Book Thief', 3],
+    ['Harry Potter', 7],
+    ['The Mark of Athena', 8]
+  ]);
+
+  const parameters = {
+    'title': 'Favorite Books',
+    'width': 500,
+    'heigth': 400,
+    'backgroundColor': '#E6E6FA',
+    'pieHole': 0.3,
+  };
+
+  const pieChart = new google.visualization.PieChart(document.getElementById('chart'));
+  pieChart.draw(dataset, parameters);
 }
