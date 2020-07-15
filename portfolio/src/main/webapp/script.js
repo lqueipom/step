@@ -194,7 +194,7 @@ function loadFavoritePlaces() {
           lat: 9.815833, 
           lng: -71.556664
         }, 
-        zoom: 9
+        zoom: 8
     });
     locations.forEach((location) => {
       new google.maps.Marker(
@@ -224,3 +224,4 @@ function makeChart() {
     barChart.draw(dataset, parameters);
   });
 }
+
