@@ -372,7 +372,6 @@ public final class FindMeetingQueryTest {
     // Two optional attendees with multiple TimeRanges where they could meet.
     // No mandatory attendees present, focuses on finding times for optional attendees.
     // 
-    //  
     // Events  :       |A-|        |-----B-----|
     // Day     : |-----------------------------------|
     // Options : |--1--|  |----2---|           |--3--|
