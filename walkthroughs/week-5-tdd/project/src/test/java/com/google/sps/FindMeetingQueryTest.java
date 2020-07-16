@@ -371,6 +371,12 @@ public final class FindMeetingQueryTest {
   public void NoMandatoryAttendeesWithGapsInSchedule() {
     // Two optional attendees with multiple TimeRanges where they could meet.
     // No mandatory attendees present, focuses on finding times for optional attendees.
+    // 
+    //  
+    // Events  :       |A-|        |-----B-----|
+    // Day     : |-----------------------------------|
+    // Options : |--1--|  |----2---|           |--3--|
+    
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0900AM, DURATION_30_MINUTES), 
         Arrays.asList(PERSON_A)),
@@ -395,6 +401,12 @@ public final class FindMeetingQueryTest {
   public void NoMandatoryAttendeesWithNoGapsInSchedule() {
     // Two optional attendees that cannot find a time to meet.
     // No mandatory attendees present, focuses on finding times for optional attendees.
+    // 
+    // Events  : |--------------B--------------|
+    //           |-------A-------|     
+    // Day     : |-----------------------------|
+    // Options : 
+    
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TimeRange.START_OF_DAY, DURATION_2_HOUR), 
         Arrays.asList(PERSON_A)),
