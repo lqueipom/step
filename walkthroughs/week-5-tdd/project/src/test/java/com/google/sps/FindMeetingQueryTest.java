@@ -130,7 +130,8 @@ public final class FindMeetingQueryTest {
     // Have each person have different events. We should see two options because each person has
     // split the restricted times.
     //
-    // Events  :       |--A--|     |--B--|
+    // Events  : |--------------C--------------|
+    //                 |--A--|     |--B--|
     // Day     : |-----------------------------|
     // Options : |--1--|     |--2--|     |--3--|
 
@@ -160,9 +161,10 @@ public final class FindMeetingQueryTest {
     // Have each person have different events. We should see two options because each person has
     // split the restricted times.
     //
-    // Events  :       |--A--|     |--B--|
+    // Events  :             |--C--|
+    //                 |--A--|     |--B--|
     // Day     : |-----------------------------|
-    // Options : |--1--|     |--2--|     |--3--|
+    // Options : |--1--|                 |--2--|
 
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0800AM, DURATION_30_MINUTES),
@@ -363,8 +365,8 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void NoMandatoryAttendeesWithGapsInSchedule() {
-    // Add an event, but make the only attendee someone different from the person looking to book
-    // a meeting. This event should not affect the booking.
+    // Two optional attendees with multiple TimeRanges where they could meet.
+    // No mandatory attendees present, focuses on maximizing optional attendees.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0900AM, DURATION_30_MINUTES), 
         Arrays.asList(PERSON_A)),
@@ -387,8 +389,8 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void NoMandatoryAttendeesWithNoGapsInSchedule() {
-    // Add an event, but make the only attendee someone different from the person looking to book
-    // a meeting. This event should not affect the booking.
+    // Two optional attendees that cannot find a time to meet.
+    // No mandatory attendees present, focuses on maximizing optional attendees. 
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TimeRange.START_OF_DAY, DURATION_2_HOUR), 
         Arrays.asList(PERSON_A)),
@@ -400,7 +402,7 @@ public final class FindMeetingQueryTest {
     request.addOptionalAttendee(PERSON_B);
 
     Collection<TimeRange> actual = query.query(events, request);
-    Collection<TimeRange> expected = Arrays.asList();
+    Collection<TimeRange> expected = Arrays.asList(TimeRange.fromStartDuration(TimeRange.START_OF_DAY, DURATION_2_HOUR));
 
     Assert.assertEquals(expected, actual);
   }
