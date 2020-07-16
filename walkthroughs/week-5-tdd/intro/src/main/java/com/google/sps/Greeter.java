@@ -22,8 +22,7 @@ public class Greeter {
    * Returns a greeting for the given name.
    */
   public String greet(String name) {
-    String noWhitespace = name.replaceAll("\\s","");
-    String noSymbols = noWhitespace.replaceAll("\\W", "");
+    String noWhitespaceOrSymbols = name.replaceAll("\\s", "").replaceAll("\\W", "");
     return "Hello " + noSymbols;
   }
 }
