@@ -99,7 +99,7 @@ public final class FindMeetingQuery {
     // Stores all TimeRanges in which mandatory attendees can meet.
     ArrayList<TimeRange> availableTimes = new ArrayList<>();
     // Stores all TimeRanges in which optional attendees can meet.
-    ArrayList<TimeRange> optionalCalendar = new ArrayList<>();
+    ArrayList<TimeRange> optionalTimes = new ArrayList<>();
 
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
       return Arrays.asList();
@@ -146,7 +146,7 @@ public final class FindMeetingQuery {
       ArrayList<TimeRange> optionalAttendeesCalendar = getCalendar(
                                                                     allTimesOptionalAttendees, 
                                                                     notOptionalTimes, 
-                                                                    optionalCalendar, 
+                                                                    optionalTimes, 
                                                                   );
       Collections.sort(optionalAttendeesCalendar, TimeRange.ORDER_BY_START);
       return optionalAttendeesCalendar;
