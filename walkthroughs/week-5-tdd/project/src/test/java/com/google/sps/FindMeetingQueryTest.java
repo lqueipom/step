@@ -99,7 +99,7 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void everyAttendeeIsConsidered() {
-    // Have each person have different events. We should see two options because each person has
+    // Have each person have different events. We should see three options because each person has
     // split the restricted times.
     //
     // Events  :       |--A--|     |--B--|
@@ -127,8 +127,9 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void optionalAttendeePresentNoImpact() {
-    // Have each person have different events. We should see two options because each person has
-    // split the restricted times.
+    // Have each person have different events. We should see three options because each person has
+    // split the restricted times and our optional attendee cannot find a time to meet with mandatory
+    // attendees. 
     //
     // Events  : |--------------C--------------|
     //                 |--A--|     |--B--|
@@ -159,7 +160,8 @@ public final class FindMeetingQueryTest {
   @Test
   public void optionalAttendeePresentWithImpact() {
     // Have each person have different events. We should see two options because each person has
-    // split the restricted times.
+    // no overlapping events and our optional attendee could attend if certain TimeRanges are
+    // chosen.
     //
     // Events  :             |--C--|
     //                 |--A--|     |--B--|
@@ -290,10 +292,12 @@ public final class FindMeetingQueryTest {
 
   @Test
   public void justEnoughRoomWithOptionalAttendee() {
-    // Have one person, but make it so that there is just enough room at one point in the day to
-    // have the meeting.
+    // Have one person, but make it so that there is just enough room at one point in the day for
+    // the mandatory attendees to have the meeting. Because of this, the optional attendee will 
+    // not be able to attend. 
     //
-    // Events  : |--A--|     |----A----|
+    // Events  :       |-B| 
+    //           |--A--|     |----A----|
     // Day     : |---------------------|
     // Options :       |-----|
 
@@ -366,7 +370,7 @@ public final class FindMeetingQueryTest {
   @Test
   public void NoMandatoryAttendeesWithGapsInSchedule() {
     // Two optional attendees with multiple TimeRanges where they could meet.
-    // No mandatory attendees present, focuses on maximizing optional attendees.
+    // No mandatory attendees present, focuses on finding times for optional attendees.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TIME_0900AM, DURATION_30_MINUTES), 
         Arrays.asList(PERSON_A)),
@@ -390,7 +394,7 @@ public final class FindMeetingQueryTest {
   @Test
   public void NoMandatoryAttendeesWithNoGapsInSchedule() {
     // Two optional attendees that cannot find a time to meet.
-    // No mandatory attendees present, focuses on maximizing optional attendees. 
+    // No mandatory attendees present, focuses on finding times for optional attendees.
     Collection<Event> events = Arrays.asList(
         new Event("Event 1", TimeRange.fromStartDuration(TimeRange.START_OF_DAY, DURATION_2_HOUR), 
         Arrays.asList(PERSON_A)),
