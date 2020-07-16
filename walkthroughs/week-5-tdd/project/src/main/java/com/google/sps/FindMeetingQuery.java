@@ -28,7 +28,7 @@ import java.util.Arrays;
 public final class FindMeetingQuery {
   
   /**
-  * Returns an unsorted ArrayList of TimeRanges that represent the times a group of attendees
+  * Returns a sorted ArrayList of TimeRanges that represent the times a group of attendees
   * can meet.
   */
   private ArrayList<TimeRange> getAvailability(ArrayList<TimeRange> busyTimesForChosenAttendees) {
@@ -41,7 +41,7 @@ public final class FindMeetingQuery {
       // Checks whether our attendees have overlapping TimeRanges.
       if (time.overlaps(currentBusyTime)) {
         int start = currentBusyTime.start();
-        currentBusyTime = TimeRange.fromStartEnd(start, time.end() < currentBusyTime.end() ? currentBusyTime.end() : time.end(), false);
+        currentBusyTime = TimeRange.fromStartEnd(start, Math.max(currentBusyTime.end(), time.end()), false);
       } else {
         // Adds TimeRange when they don't conflict with each other.
         busyTimesForChosenAttendeesNoOverlaps.add(currentBusyTime);
@@ -65,12 +65,10 @@ public final class FindMeetingQuery {
       freeTimesForChosenAttendees.add(lastFreeTimeRange);
     }
     // Checks whether we have enough TimeRanges to iterate through
-    if (busyTimesForChosenAttendeesNoOverlaps.size() > 1) {
-      for (int j = 0; j < busyTimesForChosenAttendeesNoOverlaps.size() - 1; j++) {
-        TimeRange freeTime = TimeRange.fromStartEnd(busyTimesForChosenAttendeesNoOverlaps.get(j).end(), busyTimesForChosenAttendeesNoOverlaps.get(j + 1).start(), false);
-        if (freeTime.duration() >= request.duration()) {
-          freeTimesForChosenAttendees.add(freeTime);
-        }
+    for (int j = 0; j < busyTimesForChosenAttendeesNoOverlaps.size() - 2; j++) {
+      TimeRange freeTime = TimeRange.fromStartEnd(busyTimesForChosenAttendeesNoOverlaps.get(j).end(), busyTimesForChosenAttendeesNoOverlaps.get(j + 1).start(), false);
+      if (freeTime.duration() >= request.duration()) {
+        freeTimesForChosenAttendees.add(freeTime);
       }
     }
     Collections.sort(freeTimesForChosenAttendees, TimeRange.ORDER_BY_START);
