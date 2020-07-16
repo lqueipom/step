@@ -21,8 +21,12 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Arrays;
 
+/**
+* The FindMeetingQuery class represents a meeting that we want to schedule given
+* the TimeRanges of events. 
+*/
 public final class FindMeetingQuery {
-    
+  
   public ArrayList<TimeRange> gettingCalendar(
                                                 ArrayList<TimeRange> allTimesRequiredAttendees,
                                                 ArrayList<TimeRange> notAvailableTimes,
@@ -68,6 +72,11 @@ public final class FindMeetingQuery {
     return availableTimes;                              
   }
 
+  /**
+  * Takes in a collection of Events and a MeetingRequest and is expected to return
+  * a collection of TimeRanges in which the Meeting Request can be satisfied given the
+  * the constraints posed by Events.
+  */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<String> attendeesWithoutEvents = new ArrayList<>(request.getAttendees());
     int initialAttendeeCount = attendeesWithoutEvents.size();
@@ -131,11 +140,7 @@ public final class FindMeetingQuery {
           }
         }
       }
-      if (calendar.isEmpty()) {
-        return finalCalendar;
-      } else {
-        return calendar;
-      }
+      calendar.isEmpty() ? finalCalendar : calendar;
     } else {
       ArrayList<TimeRange> finalOptionalCalendar = gettingCalendar(
                                                                     allTimesOptionalAttendees, 
