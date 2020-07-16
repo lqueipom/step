@@ -31,28 +31,27 @@ public final class FindMeetingQuery {
   * Returns an unsorted ArrayList of TimeRanges that represent the times a group of attendees
   * can meet.
   */
-  private ArrayList<TimeRange> getCalendar(
-                                                ArrayList<TimeRange> allTimesRequiredAttendees,
-                                                ArrayList<TimeRange> notAvailableTimes,
-                                                ArrayList<TimeRange> availableTimes,
-                                              ) {
-    TimeRange current = allTimesRequiredAttendees.get(0);
-    for (TimeRange time : allTimesRequiredAttendees) {
+  private ArrayList<TimeRange> getAvailability(ArrayList<TimeRange> busyTimesForChosenAttendees) {
+    TimeRange current = busyTimesForChosenAttendees.get(0);
+    ArrayList<TimeRange> busyTimesForChosenAttendeesNoOverlaps = new ArrayList<>();
+    // Stores all TimeRanges in which attendees can meet.
+    ArrayList<TimeRange> freeTimesForChosenAttendees = new ArrayList<>();
+    
+    for (TimeRange time : busyTimesForChosenAttendees) {
       // Checks whether our attendees have overlapping TimeRanges.
       if (time.overlaps(current)) {
         int start = current.start();
         current = TimeRange.fromStartEnd(start, time.end() < current.end() ? current.end() : time.end(), false);
       } else {
         // Adds TimeRange when they don't conflict with each other.
-        notAvailableTimes.add(current);
+        busyTimesForChosenAttendeesNoOverlaps.add(current);
         current = time;
         }
     }
     // Adding last one, we now have the full calendar of not available time ranges. 
-    notAvailableTimes.add(current);
-    int numberOfTimes = notAvailableTimes.size();
-    TimeRange first = notAvailableTimes.get(0);
-    TimeRange last = notAvailableTimes.get(numberOfTimes - 1);
+    busyTimesForChosenAttendeesNoOverlaps.add(current);
+    TimeRange first = busyTimesForChosenAttendeesNoOverlaps.get(0);
+    TimeRange last = busyTimesForChosenAttendeesNoOverlaps.get(busyTimesForChosenAttendeesNoOverlaps.size() - 1);
     
     // Creates TimeRanges that include the start/end of the day.
     TimeRange firstHalf = TimeRange.fromStartEnd(TimeRange.START_OF_DAY, first.start(), false);
@@ -60,21 +59,22 @@ public final class FindMeetingQuery {
     
     // Takes out TimeRanges that do not last enough time. 
     if (firstHalf.duration() >= request.duration()) {
-      availableTimes.add(firstHalf);
+      freeTimeForChosenAttendees.add(firstHalf);
     }
     if (secondHalf.duration() >= request.duration()) {
-      availableTimes.add(secondHalf);
+      freeTimesForChosenAttendees.add(secondHalf);
     }
     // Checks whether we have enough TimeRanges to iterate through
-    if (numberOfTimes > 1) {
-      for (int j = 0; j < numberOfTimes - 1; j++) {
-        TimeRange newTime = TimeRange.fromStartEnd(notAvailableTimes.get(j).end(), notAvailableTimes.get(j + 1).start(), false);
+    if (busyTimesForChosenAttendeesNoOverlaps.size() > 1) {
+      for (int j = 0; j < busyTimesForChosenAttendeesNoOverlaps.size() - 1; j++) {
+        TimeRange newTime = TimeRange.fromStartEnd(busyTimesForChosenAttendeesNoOverlaps.get(j).end(), busyTimesForChosenAttendeesNoOverlaps.get(j + 1).start(), false);
         if (newTime.duration() >= request.duration()) {
-          availableTimes.add(newTime);
+          freeTimesForChosenAttendees.add(newTime);
         }
       }
     }
-    return availableTimes;                              
+    Collections.sort(freeTimesForChosenAttendees, TimeRange.ORDER_BY_START);
+    return freeTimesForChosenAttendees;                              
   }
 
   /**
@@ -82,24 +82,12 @@ public final class FindMeetingQuery {
   * a collection of TimeRanges in which the MeetingRequest can be satisfied given the
   * the constraints posed by the attendees' events. 
   */
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    ArrayList<String> attendeesWithoutEvents = new ArrayList<>(request.getAttendees());
-    int initialAttendeeCount = attendeesWithoutEvents.size();
-    ArrayList<String> optionalAttendeesWithoutEvents = new ArrayList<>(request.getOptionalAttendees());
-    int initialOptionalAttendeeCount = optionalAttendeesWithoutEvents.size();
-    
+  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) { 
     // Stores all TimeRanges of mandatory attendees with no repetitions.
-    Collection<TimeRange> timesRequiredAttendees = new HashSet<>();
+    Collection<TimeRange> busyTimesForRequiredAttendees = new HashSet<>();
     // Stores all TimeRanges of optional attendees with no repetitions.
-    Collection<TimeRange> timesOptionalAttendees = new HashSet<>();
+    Collection<TimeRange> busyTimesForOptionalAttendees = new HashSet<>();
     // Stores all TimeRanges in which mandatory attendees are busy with no overlaps.
-    ArrayList<TimeRange> notAvailableTimes = new ArrayList<>();
-    // Stores all TimeRanges in which optional attendees are busy with no overlaps.
-    ArrayList<TimeRange> notOptionalTimes = new ArrayList<>();
-    // Stores all TimeRanges in which mandatory attendees can meet.
-    ArrayList<TimeRange> availableTimes = new ArrayList<>();
-    // Stores all TimeRanges in which optional attendees can meet.
-    ArrayList<TimeRange> optionalTimes = new ArrayList<>();
 
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
       return Arrays.asList();
@@ -108,61 +96,49 @@ public final class FindMeetingQuery {
     if (events.size() == 0) {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
-      
-    ArrayList<String> toDeleteMan = new ArrayList<>();
-    ArrayList<String> toDeleteOpt = new ArrayList<>();
-      
+    ArrayList<String> attendeesWithoutEvents = new ArrayList<>(request.getAttendees());
+    ArrayList<String> optionalAttendeesWithoutEvents = new ArrayList<>(request.getOptionalAttendees());
+    
     for (Event event : events) {
       for (String attendee : event.getAttendees()) {
-        if (attendeesWithoutEvents.contains(attendee)) {
+        if (request.getAttendees().contains(attendee)) {
           // Adds TimeRange if any mandatory attendee attends this event.
-          timesRequiredAttendees.add(event.getWhen());
-          // Adds whenever a mandatory attendee appears in an event. 
-          toDeleteMan.add(attendee);
+          busyTimesForRequiredAttendees.add(event.getWhen());
+          // Deletes from list when attendee appears in an Event.
+          attendeesWithoutEvents.remove(attendee);
         }
-        if (optionalAttendeesWithoutEvents.contains(attendee)) {
-          timesOptionalAttendees.add(event.getWhen());
-          toDeleteOpt.add(attendee);
+        if (request.getOptionalAttendees().contains(attendee)) {
+          busyTimesForOptionalAttendees.add(event.getWhen());
+          optionalAttendeesWithoutEvents.remove(attendee);
         }
       }
     }
-    // Deletes from our initial attendee counts those who appears on events so we can check 
-    // whether there is no overlap between the attendees of our given Events and those request in Meeting Request.
-    attendeesWithoutEvents.removeAll(toDeleteMan);
-    optionalAttendeesWithoutEvents.removeAll(toDeleteOpt);
-    
     // Transforming collections of TimeRanges into an ArrayList to allow indexing.
-    ArrayList<TimeRange> allTimesRequiredAttendees = new ArrayList<>(timesRequiredAttendees);
-    ArrayList<TimeRange> allTimesOptionalAttendees = new ArrayList<>(timesOptionalAttendees);
-    Collections.sort(allTimesRequiredAttendees, TimeRange.ORDER_BY_START);
-    Collections.sort(allTimesOptionalAttendees, TimeRange.ORDER_BY_START);
+    ArrayList<TimeRange> busyTimesForRequiredAttendeesList = new ArrayList<>(busyTimesForRequiredAttendees);
+    ArrayList<TimeRange> busyTimesForOptionalAttendeesList = new ArrayList<>(busyTimesForOptionalAttendees);
+    Collections.sort(busyTimesForRequiredAttendeesList, TimeRange.ORDER_BY_START);
+    Collections.sort(busyTimesForOptionalAttendeesList, TimeRange.ORDER_BY_START);
 
     // No events conflict the schedules of the requested attendees. 
-    if (attendeesWithoutEvents.size() == initialAttendeeCount && optionalAttendeesWithoutEvents.size() == initialOptionalAttendeeCount) {
+    if (attendeesWithoutEvents.size() == request.getAttendees().size() && optionalAttendeesWithoutEvents.size() == request.getOptionalAttendees().size()) {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
     // Checks whether mandatory attendees have no restrictions in their schedules.
-    if (allTimesRequiredAttendees.isEmpty()) {
-      ArrayList<TimeRange> optionalAttendeesCalendar = getCalendar(
-                                                                    allTimesOptionalAttendees, 
-                                                                    notOptionalTimes, 
-                                                                    optionalTimes, 
-                                                                  );
-      Collections.sort(optionalAttendeesCalendar, TimeRange.ORDER_BY_START);
+    if (busyTimesForRequiredAttendeesList.isEmpty()) {
+      ArrayList<TimeRange> optionalAttendeesCalendar = getAvailability(busyTimesForOptionalAttendeesList);
       return optionalAttendeesCalendar;
     } else {
-      ArrayList<TimeRange> requiredAttendeesCalendar = getCalendar(allTimesRequiredAttendees, notAvailableTimes, availableTimes);
-      Collections.sort(requiredAttendeesCalendar, TimeRange.ORDER_BY_START);
-      ArrayList<TimeRange> allAttendeesCalendar = new ArrayList<>(requiredAttendeesCalendar);
+      ArrayList<TimeRange> requiredAttendeesCalendar = getAvailability(busyTimesForRequiredAttendeesList);
+      ArrayList<TimeRange> requiredAndOptionalAttendeesCalendar = new ArrayList<>(requiredAttendeesCalendar);
 
-      for (TimeRange opt : allTimesOptionalAttendees) {
-        for (TimeRange permanent : requiredAttendeesCalendar) {
-          if (permanent.overlaps(opt)) {
-            allAttendeesCalendar.remove(permanent);
+      for (TimeRange busyTimeForOptionalAttendee : busyTimesForOptionalAttendeesList) {
+        for (TimeRange freeTimeForRequiredAttendee : requiredAttendeesCalendar) {
+          if (permanent.overlaps(busyTimeForOptionalAttendee)) {
+            requiredAndOptionalAttendeesCalendar.remove(freeTimeForRequiredAttendee);
           }
         }
       }
-      allAttendeesCalendar.isEmpty() ? return requiredAttendeesCalendar : return allAttendeesCalendar;
+      requiredAndOptionalAttendeesCalendar.isEmpty() ? return requiredAttendeesCalendar : return requiredAndOptionalAttendeesCalendar;
     }
   }
 }
