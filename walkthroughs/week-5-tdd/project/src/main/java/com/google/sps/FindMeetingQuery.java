@@ -31,21 +31,17 @@ public final class FindMeetingQuery {
   * Returns an unsorted ArrayList of TimeRanges that represent the times a group of attendees
   * can meet.
   */
-  public ArrayList<TimeRange> gettingCalendar(
+  private ArrayList<TimeRange> getCalendar(
                                                 ArrayList<TimeRange> allTimesRequiredAttendees,
                                                 ArrayList<TimeRange> notAvailableTimes,
                                                 ArrayList<TimeRange> availableTimes,
                                               ) {
     TimeRange current = allTimesRequiredAttendees.get(0);
-    for (TimeRange time: allTimesRequiredAttendees) {
+    for (TimeRange time : allTimesRequiredAttendees) {
       // Checks whether our attendees have overlapping TimeRanges.
       if (time.overlaps(current)) {
         int start = current.start();
-          if (time.end() < current.end()) {
-            current = TimeRange.fromStartEnd(start, current.end(), false);
-          } else {
-            current = TimeRange.fromStartEnd(start, time.end(), false);
-          }
+        current = TimeRange.fromStartEnd(start, time.end() < current.end() ? current.end() : time.end(), false);
       } else {
         // Adds TimeRange when they don't conflict with each other.
         notAvailableTimes.add(current);
@@ -84,7 +80,7 @@ public final class FindMeetingQuery {
   /**
   * Takes in a collection of Events and a MeetingRequest and is expected to return
   * a collection of TimeRanges in which the MeetingRequest can be satisfied given the
-  * the constraints posed by the attendees events. 
+  * the constraints posed by the attendees' events. 
   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<String> attendeesWithoutEvents = new ArrayList<>(request.getAttendees());
@@ -121,7 +117,7 @@ public final class FindMeetingQuery {
         if (attendeesWithoutEvents.contains(attendee)) {
           // Adds TimeRange if any mandatory attendee attends this event.
           timesRequiredAttendees.add(event.getWhen());
-          // Adds whether a mandatory attendee appears in an event. 
+          // Adds whenever a mandatory attendee appears in an event. 
           toDeleteMan.add(attendee);
         }
         if (optionalAttendeesWithoutEvents.contains(attendee)) {
@@ -146,27 +142,27 @@ public final class FindMeetingQuery {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
     // Checks whether mandatory attendees have no restrictions in their schedules.
-    if (!allTimesRequiredAttendees.isEmpty()) {
-      ArrayList<TimeRange> finalCalendar = gettingCalendar(allTimesRequiredAttendees, notAvailableTimes, availableTimes);
-      Collections.sort(finalCalendar, TimeRange.ORDER_BY_START);
-      ArrayList<TimeRange> calendar = new ArrayList<>(finalCalendar);
-    
-      for (TimeRange opt : allTimesOptionalAttendees) {
-        for (TimeRange permanent : finalCalendar) {
-          if (permanent.overlaps(opt)) {
-            calendar.remove(permanent);
-          }
-        }
-      }
-      calendar.isEmpty() ? finalCalendar : calendar;
-    } else {
-      ArrayList<TimeRange> finalOptionalCalendar = gettingCalendar(
+    if (allTimesRequiredAttendees.isEmpty()) {
+      ArrayList<TimeRange> optionalAttendeesCalendar = getCalendar(
                                                                     allTimesOptionalAttendees, 
                                                                     notOptionalTimes, 
                                                                     optionalCalendar, 
                                                                   );
-      Collections.sort(finalOptionalCalendar, TimeRange.ORDER_BY_START);
-      return finalOptionalCalendar;
+      Collections.sort(optionalAttendeesCalendar, TimeRange.ORDER_BY_START);
+      return optionalAttendeesCalendar;
+    } else {
+      ArrayList<TimeRange> requiredAttendeesCalendar = getCalendar(allTimesRequiredAttendees, notAvailableTimes, availableTimes);
+      Collections.sort(requiredAttendeesCalendar, TimeRange.ORDER_BY_START);
+      ArrayList<TimeRange> allAttendeesCalendar = new ArrayList<>(requiredAttendeesCalendar);
+
+      for (TimeRange opt : allTimesOptionalAttendees) {
+        for (TimeRange permanent : requiredAttendeesCalendar) {
+          if (permanent.overlaps(opt)) {
+            allAttendeesCalendar.remove(permanent);
+          }
+        }
+      }
+      allAttendeesCalendar.isEmpty() ? return requiredAttendeesCalendar : return allAttendeesCalendar;
     }
   }
 }
