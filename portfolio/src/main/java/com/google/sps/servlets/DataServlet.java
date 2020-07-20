@@ -22,6 +22,10 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.gson.Gson;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+import com.google.sps.data.CommentClass;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
@@ -46,23 +50,19 @@ public class DataServlet extends HttpServlet {
   @Override 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     int quantity = Integer.parseInt(request.getParameter("amount"));
-    Query query = new Query("Comments").addSort("comment", SortDirection.ASCENDING);
+    Query query = new Query("Comments").addSort("commentInstance", SortDirection.ASCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(quantity));
     
     for (Entity entity : results) {
-      json.add(entity.getProperty("comment"));
+      String comment = (String) entity.getProperty("commentInstance");
+      json.add(comment);
     }
 
     // Send JSON string.
     String jsonVersion = new Gson().toJson(json);
     response.setContentType("application/json;");
     response.getWriter().println(jsonVersion);
-  }
-
-  private String convertToJson(List messages) {
-    Gson gson = new Gson();
-    return gson.toJson(messages);
   }
 
   @Override
@@ -75,13 +75,21 @@ public class DataServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
 
+    Document doc = Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float score = sentiment.getScore();
+    languageService.close();
+
     Translate translate = TranslateOptions.getDefaultInstance().getService();
     Translation translation = translate.translate(text, Translate.TranslateOption.targetLanguage(language));
     String finalText = translation.getTranslatedText();
-    System.out.println(language);
+
+    CommentClass commentInstance = new CommentClass(finalText, score);
+    String commentInstanceJSON = new Gson().toJson(commentInstance);
     
     Entity taskEntity = new Entity("Comments");
-    taskEntity.setProperty("comment", finalText);
+    taskEntity.setProperty("commentInstance", commentInstanceJSON);
     taskEntity.setProperty("email", email);
 
     // Storing comments in their respective bins.
@@ -98,7 +106,7 @@ public class DataServlet extends HttpServlet {
     
     response.setContentType("text/html; charset=UTF-8");
     response.setCharacterEncoding("UTF-8");
-    response.getWriter().println(finalText);
+    response.sendRedirect("/index.html");
 }
 
 /**
